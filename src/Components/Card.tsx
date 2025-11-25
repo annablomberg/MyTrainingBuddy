@@ -9,7 +9,7 @@ interface CardProps {
 export function Card({ children, className = ""}:CardProps){
     return (
         <div 
-        className={"rounded-2xl border border-slate-200 bg-white/80 shadow-sm p-4" + className}
+        className={"rounded-2xl border border-slate-200 bg-white/80 shadow-lg" + className}
         >
         {children}    
         </div>
@@ -30,7 +30,7 @@ type CardTextProps = HTMLAttributes<HTMLParagraphElement>;
 export function CardText({ className = "", ...rest }: CardTextProps) {
   return (
     <p
-      className={"text-sm text-slate-600 leading-snug " + className}
+      className={"text-sm text-slate-600" + className}
       {...rest}
     />
   );
@@ -42,7 +42,7 @@ export function CardImage({ className = "", ...rest }: CardImageProps) {
   return (
     <img
       className={
-        "w-full h-40 object-cover rounded-xl mb-3 " +
+        "w-full h-full object-cover rounded-xl mb-3 " +
         className
       }
       {...rest}

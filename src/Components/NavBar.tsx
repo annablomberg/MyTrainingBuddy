@@ -15,13 +15,13 @@ const Navbar: React.FC<NavbarProps> = ({current}) => {
     ];
 
 return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur border-b border-slate-200">
-      <div className="mx-auto flex justify-between px-4 py-2">
+    <nav className="shadow-xl fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur border-b border-slate-200">
+      <div className="mx-auto flex justify-between px-5">
         <div >
           <img
             src="/logo.png"
             alt="logo"
-            width={200}
+            width={250}
             height={50} 
           />
         </div>
