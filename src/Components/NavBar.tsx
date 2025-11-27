@@ -1,21 +1,24 @@
 import React from "react";
+import { Link, useLocation } from "react-router-dom";
 
-type Page = "home" | "chat" | "friends" | "about";
 
-interface NavbarProps {
-    current: Page; 
-}
+const Navbar: React.FC = () => {
 
-const Navbar: React.FC<NavbarProps> = ({current}) => {
-    const links: {id: Page; label: string; href: string}[] = [
-    {id: "home", label: "Home", href: "#home"},
-    { id: "chat", label: "Chat", href: "#chat" },
-    { id: "friends", label: "Find friends", href: "#friends" },
-     { id: "about", label: "About", href: "#about" },
-    ];
+
+const links = [
+    { id: "landingpage", label: "Home", to: "/" },
+    { id: "aboutpage", label: "About", to: "/about" },
+    { id: "chatpage", label: "Chat", to: "/chatpage/:id" },
+    { id: "friendspage", label: "Find friends", to: "/friendspage/:id" },
+  ];
+
+const isActive = (to: string) => {
+    return location.pathname === to;
+  };  
+
 
 return (
-    <nav className="shadow-xl fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur border-b border-slate-200">
+    <nav className="shadow-xl fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200">
       <div className="mx-auto flex justify-between px-5">
         <div >
           <img
@@ -27,23 +30,25 @@ return (
         </div>
 
         <div className="hidden md:flex items-center space-x-4">
-          {links.map((link) =>
-            link.id === current ? null : (      
-              <a
-                key={link.id}
-                href={link.href}
-                className="px-3 text-gray-600 font-semibold hover:text-blue-500"
-              >
-                {link.label}
-              </a>
-            )
-          )}
-
-          <a
-            href="#login"
-            className="inline-flex items-center px-5 py-2 text-white font-semibold bg-blue-400 hover:bg-blue-600 active:bg-blue-800 transition rounded-xl"
+          {links.map((link) => (
+            <Link
+              key={link.id}
+              to={link.to}
+              className={
+                "px-3 font-semibold transition " +
+                (isActive(link.to)
+                  ? "text-blue-600"
+                  : "text-gray-600 hover:text-blue-500")
+              }
+            >
+              {link.label}
+            </Link>
+          ))}
+        <Link
+          to="/login"
+          className="inline-flex items-center px-5 py-2 text-white font-semibold bg-blue-400 hover:bg-blue-600 active:bg-blue-800 transition rounded-xl"
           >Log in
-          </a>
+        </Link>
         </div>
       </div>
     </nav>

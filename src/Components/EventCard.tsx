@@ -4,15 +4,6 @@ import { DifficultyBadge, Price } from "./EventPieces";
 import type { Difficulty } from "./EventPieces";
 
 
-// image 
-// Event name 
-// Additional info
-// difficulty
-// marker for which sport (symbol or color symbol)
-// location & date 
-// se more info / register button that takes you to about page where you can register 
-// price (include member discounts / free for members )
-
 interface EventCardProps {
     title: string;
     description: string;
