@@ -9,10 +9,10 @@ const Footer: React.FC = () => {
         <div className="flex flex-col">
           <div className="flex items-center gap-2 mb-2">
             <img
-              src="/logo.png"
+              src="/new_logo.png"
               alt="logo"
-              width={200}
-              height={40}
+              width={260}
+              height={30}
             />
           </div>
           <p className="text-sm text-slate-600">

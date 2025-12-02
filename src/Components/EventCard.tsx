@@ -2,6 +2,7 @@ import React from "react";
 import { Card, CardImage, CardText, CardTitle } from "./Card";
 import { DifficultyBadge, Price } from "./EventPieces";
 import type { Difficulty } from "./EventPieces";
+import { TbCalendarMonthFilled, TbLocation } from "react-icons/tb";
 
 
 interface EventCardProps {
@@ -15,7 +16,7 @@ interface EventCardProps {
     price: string;
     memberPrice?: string;
     freeForMembers?: boolean;
-    onSeeMore?: () => void // for button click 
+    onSeeMore?: () => void 
 }
 
 export function EventCard(props: EventCardProps){
@@ -59,9 +60,8 @@ return (
       </CardText>
 
       <div className="mt-2 flex items-center gap-2 text-sm text-slate-500">
-        <span>📍 {location}</span>
-        <span>·</span>
-        <span>🗓 {date}</span>
+      <TbLocation /> {location}
+      <TbCalendarMonthFilled />{date}
       </div>
     </div>
 

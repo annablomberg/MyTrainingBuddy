@@ -45,8 +45,7 @@ export function ExerciseSearchBar({
   return (
     <form
       onSubmit={handleSubmit}
-      className="max-w-full mb-6 bg-white/80 rounded-2xl shadow p-4 space-y-4"
-    >
+      className="max-w-full mb-6 bg-white/80 rounded-2xl shadow p-4 space-y-4">
       <div className="flex gap-2">
         <input
           type="text"

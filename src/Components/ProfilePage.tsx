@@ -4,22 +4,26 @@ import { useAuth } from "./AuthContext";
 
 export function ProfilePage(){
 
-const { user } = useAuth();
+const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-  // If not logged in, redirect to login
   useEffect(() => {
     if (!user) {
       navigate("/login");
     }
   }, [user, navigate]);
 
-  if (!user) return null; // while redirecting
+  if (!user) return null; 
 
   const initial = user.name ? user.name.charAt(0).toUpperCase() : "?";
 
+  const handleLogout = () => {
+    logout();
+    navigate("/login")
+  }
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-slate-50">
+    <div className="min-h-screen flex items-center justify-center bg-[radial-gradient(circle_at_top,#d7f3ff_0,#a4d6ff_30%,#ffe5cf_80%)]">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
         <div className="flex flex-col items-center mb-6">
           <div className="w-24 h-24 rounded-full bg-slate-200 overflow-hidden flex items-center justify-center border-4 border-white shadow">
@@ -62,13 +66,27 @@ const { user } = useAuth();
             Link your social media
           </button>
         </div>
+        
+
+        <div className="mb-4">
+        <button 
+          type="button"
+          className="w-full rounded-lg bg-rose-300 text-white text-sm font-semibold py-2.5 hover:bg-rose-400 active:bg-rose-400 transition"
+          
+        >
+          Edit Profile
+        </button>
+        </div>
 
         <button
           type="button"
+          onClick={handleLogout}
           className="w-full rounded-lg bg-blue-500 text-white text-sm font-semibold py-2.5 hover:bg-blue-600 active:bg-blue-700 transition"
         >
-          Edit profile
+          Log out
         </button>
+       
+
       </div>
     </div>
   );

@@ -24,12 +24,12 @@ function Navbar() {
   return (
     <nav className="shadow-xl fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur border-b border-slate-200">
       <div className="mx-auto flex justify-between px-5">
-        <div>
+        <div className= "mt-3 mb-3">
           <img
-            src="/logo.png"
+            src="/new_logo.png"
             alt="logo"
-            width={250}
-            height={50} />
+            width={325}
+            height={38} />
         </div>
 
         <div className="hidden md:flex items-center space-x-4">
