@@ -2,29 +2,38 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { FaFacebook, FaGoogle } from "react-icons/fa";
 import { useAuth } from "./AuthContext";
+import { ApiError } from "../api/http";
 
 export function LoginPage(){
-    const { loginAsJohnDoe } = useAuth();
+    const { login } = useAuth();
     const navigate = useNavigate();
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
+    setIsSubmitting(true);
 
-    // Here call real backend later.
-    // For now, just log in as John Doe:
-    loginAsJohnDoe();
-    navigate("/"); // go back to home
-  };
-
-  const handleSocialLogin = (provider: "facebook" | "google") => {
-    // In the real app redirect to OAuth.
-    // For prototype, just log in as John Doe:
-    console.log(`Mock ${provider} login`);
-    loginAsJohnDoe();
-    navigate("/");
+    try {
+      await login({ username, password });
+      navigate("/");
+    } catch (err) {
+      if (err instanceof ApiError) {
+        const msg =
+          (err.body as any)?.message ||
+          (err.body as any)?.error ||
+          `Login failed (HTTP ${err.status}).`;
+        setError(msg);
+      } else {
+        setError("Login failed. Please try again.");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
 
@@ -89,7 +98,6 @@ export function LoginPage(){
         <div className="space-y-3">
           <button
             type="button"
-            onClick={() => handleSocialLogin("google")}
             className="w-full flex items-center justify-center gap-2 rounded-lg border border-slate-300 py-2 text-sm font-medium
                        hover:bg-slate-50"
           >
@@ -99,7 +107,6 @@ export function LoginPage(){
 
           <button
             type="button"
-            onClick={() => handleSocialLogin("facebook")}
             className="w-full flex items-center justify-center gap-2 rounded-lg border border-slate-300 py-2 text-sm font-medium
                        hover:bg-slate-50"
           >
