@@ -2,6 +2,19 @@ import type { HTMLAttributes } from "react";
 
 export type Difficulty = "Beginner" | "Intermediate" | "Advanced"
 
+export type EventInfo = {
+  title: string;
+  description: string;
+  image: string;
+  difficulty: Difficulty;
+  sport: string;
+  location: string;
+  date: string;
+  price: string;
+  memberPrice?: string;
+  freeForMembers?: boolean;
+};
+
 export function DifficultyBadge({level}: {level: Difficulty}){
     const color = 
     level === "Beginner" ? "bg-emerald-100 text-emerald-700"

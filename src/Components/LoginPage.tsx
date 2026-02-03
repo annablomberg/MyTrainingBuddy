@@ -38,7 +38,6 @@ export function LoginPage(){
           Log in to My Training Buddy to find sessions and training partners.
         </p>
 
-        {/* Username/password form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
@@ -79,7 +78,6 @@ export function LoginPage(){
           </button>
         </form>
 
-        {/* Divider */}
         <div className="flex items-center my-6">
           <div className="flex-1 h-px bg-slate-200" />
           <span className="px-3 text-xs text-slate-400 uppercase">
@@ -88,7 +86,6 @@ export function LoginPage(){
           <div className="flex-1 h-px bg-slate-200" />
         </div>
 
-        {/* Social logins */}
         <div className="space-y-3">
           <button
             type="button"
@@ -111,7 +108,6 @@ export function LoginPage(){
           </button>
         </div>
 
-        {/* Sign up link */}
         <p className="mt-6 text-center text-sm text-slate-600">
           Don&apos;t have an account?{" "}
           <Link
