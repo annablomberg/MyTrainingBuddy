@@ -1,13 +1,15 @@
-import React, { useEffect } from "react";
+import React, {useEffect, useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
+import {CreateEvent} from "./CreateEvent.tsx";
 
 export function ProfilePage(){
 
-const { user, logout } = useAuth();
-  const navigate = useNavigate();
+    const { user, logout } = useAuth();
+    const navigate = useNavigate();
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
 
-  useEffect(() => {
+    useEffect(() => {
     if (!user) {
       navigate("/login");
     }
@@ -77,7 +79,16 @@ const { user, logout } = useAuth();
           Edit Profile
         </button>
         </div>
+      <div className="mb-4" >
+          <button
+          type="button"
+          onClick={() => setIsCreateOpen(true)}
+          className="w-full rounded-lg bg-slate-600 text-white text-sm font-semibold py-2.5 hover:bg-slate-700 active:bg-slate-700 transition"
+          >
+              Create Event
+          </button>
 
+      </div>
         <button
           type="button"
           onClick={handleLogout}
@@ -85,9 +96,12 @@ const { user, logout } = useAuth();
         >
           Log out
         </button>
-       
-
       </div>
+        <CreateEvent
+            isOpen={isCreateOpen}
+            onClose={() => setIsCreateOpen(false)}
+        />
+
     </div>
   );
 

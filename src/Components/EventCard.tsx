@@ -1,5 +1,5 @@
 // EventCard.tsx
-import React, { useState } from "react";
+import { useState } from "react";
 import { Card, CardImage, CardText, CardTitle } from "./Card";
 import { DifficultyBadge, Price } from "./EventPieces";
 import { TbCalendarMonthFilled, TbLocation } from "react-icons/tb";
@@ -23,8 +23,7 @@ export function EventCard(props: EventCardProps) {
     date,
     price,
     memberPrice,
-    freeForMembers,
-    onSeeMore,
+    freeForMembers
   } = props;
 
   return (
