@@ -1,26 +1,37 @@
-import type {UserResponse} from "./authApi.ts";
-import {authFetchJson} from "./authFetch.ts";
-import {fetchJson} from "./http.ts";
+import type { UserResponse } from "./authApi";
+import { authFetchJson } from "./authFetch";
+import { fetchJson } from "./http";
 
-export type locationResponse = {
+// eventsApi.ts
+export type LocationResponse = {
     locationId: string;
     lat: number;
     lon: number;
-    formattedAdress: string;
-}
+    formattedAddress: string;
+};
 
 export type EventResponse = {
-    id: string;
+    eventId: string;
     eventName: string;
     eventDifficulty: string;
     exerciseType: string;
     description: string;
-    membersprice: string;
-    startTime: string;
-    endTime: string;
-    creator: UserResponse
-    Location: locationResponse
-}
+    price: number;
+    memberPrice: number;
+    startTime: string;   // ISO string
+    endTime: string;     // ISO string
+    creator: UserResponse;
+    location: LocationResponse;
+};
+
+
+export type EventsPageResponse = {
+    data: EventResponse[];
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+    pageSize: number;
+};
 
 export type EventRequest = {
     eventName: string;
@@ -29,11 +40,12 @@ export type EventRequest = {
     description: string;
     price: number;
     membersprice: number;
-    startTime: string;
-    endTime: string;
+    startTime: string;  // ISO
+    endTime: string;    // ISO
     place: string;
-}
+};
 
+// POST /api/events
 export async function createEvent(
     req: EventRequest,
     accessToken: string | null
@@ -44,12 +56,8 @@ export async function createEvent(
     });
 }
 
-export async function listEvents(
-): Promise<EventResponse[]> {
-    return fetchJson<EventResponse[]>("/api/events", {
+export async function listEvents(): Promise<EventsPageResponse> {
+    return fetchJson<EventsPageResponse>("/api/events", {
         method: "GET",
     });
 }
-
-
-

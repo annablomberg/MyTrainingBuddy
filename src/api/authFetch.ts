@@ -1,9 +1,4 @@
-import {fetchJson, ApiError} from "./http.ts";
-
-const API_BASE_URL = "http://localhost:8080";
-
-// Same as Fetch Json but adds authorization header if token is given
-// This is for our CRUD endpoints
+import { fetchJson, ApiError } from "./http";
 
 export async function authFetchJson<T>(
     path: string,
@@ -14,14 +9,13 @@ export async function authFetchJson<T>(
         throw new ApiError("Missing access token", 401, null);
     }
 
-    const headers: Record<string, string> = {};
-    Object.assign(headers, options.headers || {});  // copy existing headers
+    const headers: Record<string, string> = {
+        ...(options.headers as Record<string, string> | undefined),
+        Authorization: `Bearer ${accessToken}`,
+        "Content-Type": "application/json",
+    };
 
-    // FIX HERE – no leading space
-    headers["Authorization"] = `Bearer ${accessToken}`;
-    headers["Content-Type"] = "application/json";
-
-    return fetchJson<T>(`${API_BASE_URL}${path}`, {
+    return fetchJson<T>(path, {
         ...options,
         headers,
     });

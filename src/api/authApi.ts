@@ -31,10 +31,9 @@ export type LoginResponse = {
 
 }
 
-const API_BASE_URL = "http://localhost:8080";
 
 export async function register(req: RegisterRequest): Promise<RegisterResponse> {
-  return fetchJson<RegisterResponse>(`${API_BASE_URL}/api/auth/register`, {
+  return fetchJson<RegisterResponse>(`/api/auth/register`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(req),
@@ -42,7 +41,7 @@ export async function register(req: RegisterRequest): Promise<RegisterResponse> 
 }
 
 export async function login(req: LoginRequest): Promise<LoginResponse> {
-  return fetchJson<LoginResponse>(`${API_BASE_URL}/api/auth/login`, {
+  return fetchJson<LoginResponse>(`/api/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(req),

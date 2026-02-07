@@ -25,7 +25,7 @@ export function ExerciseSearchBar({ initialFilters, onChange }: ExerciseSearchBa
 
     function handleReset() {
         setFilters(defaultFilters);
-        onChange(defaultFilters); // trigger backend fetch with cleared filters
+        onChange(defaultFilters);      // trigger backend fetch with cleared filters
     }
 
     return (

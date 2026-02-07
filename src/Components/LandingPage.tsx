@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "./NavBar";
 import { EventCard } from "./EventCard";
 import { ExerciseSearchBar } from "./ExerciseSearchBar";
@@ -7,7 +7,6 @@ import Footer from "./Footer";
 import * as eventsApi from "../api/eventsApi";
 import { ApiError } from "../api/http";
 
-// A small type for how we want to pass data into EventCard
 type BackendEventForCard = {
     id: string;
     title: string;
@@ -19,10 +18,8 @@ type BackendEventForCard = {
     price?: string;
 };
 
-// helper: format startTime/endTime into a nice string
-function formatEventDate(startTime: number, endTime: number): string {
-    const start = new Date(startTime);
-    // later include end time too; for now just show start
+function formatEventDate(startIso: string, endIso: string): string {
+    const start = new Date(startIso);
     return start.toLocaleString("sv-SE", {
         weekday: "short",
         day: "numeric",
@@ -32,19 +29,21 @@ function formatEventDate(startTime: number, endTime: number): string {
     });
 }
 
-// map backend EventResponse → props for EventCard
 function mapEventResponseToCard(e: eventsApi.EventResponse): BackendEventForCard {
     return {
-        id: e.id,
+        id: e.eventId,
         title: e.eventName,
         description: e.description,
         difficulty: e.eventDifficulty,
         sport: e.exerciseType,
-        location: e.Location?.formattedAdress ?? "Unknown location",
+        location: e.location?.formattedAddress ?? "Unknown location",
         date: formatEventDate(e.startTime, e.endTime),
-        // backend response only has membersprice; later add `price` to EventResponse,
-        // adjust this:
-        price: e.membersprice,
+        price:
+            e.memberPrice != null
+                ? `${e.memberPrice} kr`
+                : e.price != null
+                    ? `${e.price} kr`
+                    : undefined,
     };
 }
 
@@ -53,7 +52,6 @@ function LandingPage() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    // load events from backend once
     useEffect(() => {
         let cancelled = false;
 
@@ -61,11 +59,14 @@ function LandingPage() {
             setLoading(true);
             setError(null);
             try {
+                console.log("Calling listEvents...");
                 const res = await eventsApi.listEvents();
+                console.log("listEvents result:", res);
                 if (cancelled) return;
-                const mapped = res.map(mapEventResponseToCard);
+                const mapped = res.data.map(mapEventResponseToCard);
                 setBackendEvents(mapped);
             } catch (err) {
+                console.error("listEvents failed:", err);
                 if (cancelled) return;
                 if (err instanceof ApiError) {
                     const msg =
@@ -82,11 +83,9 @@ function LandingPage() {
         }
 
         load();
-
-        return () => {
-            cancelled = true;
-        };
+        return () => { cancelled = true; };
     }, []);
+
 
     return (
         <main className="min-h-screen bg-[radial-gradient(circle_at_top,#d7f3ff_0,#a4d6ff_30%,#ffe5cf_80%)]">
@@ -101,11 +100,10 @@ function LandingPage() {
                         attend exercise sessions alone or with friends from your network.
                     </h2>
 
-                    {/* For now: no-op onChange so it doesn’t crash */}
                     <ExerciseSearchBar onChange={() => {}} />
 
                     <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-8">
-                        {/* --- STATIC (hardcoded) EVENTS --- */}
+                        {/* hardcoded events */}
                         <EventCard
                             title={"Crossfit at Fysiken"}
                             description={
