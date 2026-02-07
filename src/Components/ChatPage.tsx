@@ -203,7 +203,7 @@ export const ChatPage: React.FC = () => {
                     <div className="px-5 py-3">
                         <input
                             type="text"
-                            placeholder="Sök i konversationer"
+                            placeholder="Search in conversations"
                             className="w-full rounded-full border border-slate-400 bg-white px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-400"
                         />
                     </div>
@@ -341,7 +341,7 @@ export const ChatPage: React.FC = () => {
                             type="text"
                             value={draft}
                             onChange={(e) => setDraft(e.target.value)}
-                            placeholder="Skriv ett meddelande..."
+                            placeholder="Write a message..."
                             className="flex-1 rounded-full border border-slate-400 bg-slate-50 px-4 md:px-5 py-6 text-base outline-none focus:ring-2 focus:ring-blue-400"
                         />
                         <button

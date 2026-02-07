@@ -1,4 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { useAuth } from "./AuthContext";
+import * as eventsApi from "../api/eventsApi";
+import { ApiError } from "../api/http";
 
 interface CreateEventProps {
     isOpen: boolean;
@@ -28,11 +31,14 @@ const initialForm: EventFormState = {
     price: "",
     memberPrice: "",
     freeForMembers: false,
-    image: "placeholder.png", // default image
+    image: "placeholder.png",
 };
 
 export function CreateEvent({ isOpen, onClose }: CreateEventProps) {
     const [form, setForm] = useState<EventFormState>(initialForm);
+    const { accessToken } = useAuth();
+    const [error, setError] = useState<string | null>(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
         if (!isOpen) return;
@@ -44,7 +50,10 @@ export function CreateEvent({ isOpen, onClose }: CreateEventProps) {
     }, [isOpen, onClose]);
 
     useEffect(() => {
-        if (isOpen) setForm(initialForm);
+        if (isOpen) {
+            setForm(initialForm);
+            setError(null);
+        }
     }, [isOpen]);
 
     if (!isOpen) return null;
@@ -55,19 +64,68 @@ export function CreateEvent({ isOpen, onClose }: CreateEventProps) {
             | React.ChangeEvent<HTMLTextAreaElement>
             | React.ChangeEvent<HTMLSelectElement>
     ) {
-        const { name, value, type, checked } = e.target;
+        const target = e.target as HTMLInputElement;
+        const { name, value, type } = target;
+
         setForm((prev) => ({
             ...prev,
-            [name]: type === "checkbox" ? checked : value,
+            [name]: type === "checkbox" ? target.checked : value,
         }));
     }
 
-    function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
+        setError(null);
 
-        // Later: send to backend here
+        if (!accessToken) {
+            setError("You must be logged in to publish event");
+            return;
+        }
 
-        onClose();
+        setIsSubmitting(true);
+
+        try {
+            const priceNumber = form.price ? Number(form.price) : 0;
+            const memberPriceNumber = form.memberPrice ? Number(form.memberPrice) : 0;
+
+            if (Number.isNaN(priceNumber) || Number.isNaN(memberPriceNumber)) {
+                setError("Price and member price must be numbers.");
+                return;
+            }
+
+            const now = new Date();
+            const iso = now.toISOString();
+
+            const payload: eventsApi.EventRequest = {
+                eventName: form.title,
+                eventDifficulty: form.difficulty.toUpperCase(),
+                exerciseType: form.sport,
+                description: form.description,
+                price: priceNumber,
+                membersprice: memberPriceNumber,
+                startTime: iso,
+                endTime: iso, // TODO: replace with real UI date/time
+                place: form.location,
+            };
+
+            const created = await eventsApi.createEvent(payload, accessToken);
+
+            onClose();
+        } catch (err) {
+            if (err instanceof ApiError) {
+                console.error("Create event failed:", err.status, err.body);
+                const msg =
+                    (err.body as any)?.message ||
+                    (err.body as any)?.error ||
+                    `Could not create event (HTTP ${err.status}).`;
+                setError(msg);
+            } else {
+                console.error(err);
+                setError("Could not create event. Please try again.");
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
     }
 
     return (
@@ -88,6 +146,12 @@ export function CreateEvent({ isOpen, onClose }: CreateEventProps) {
                         ✕
                     </button>
                 </div>
+
+                {error && (
+                    <div className="mb-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                        {error}
+                    </div>
+                )}
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
@@ -228,9 +292,10 @@ export function CreateEvent({ isOpen, onClose }: CreateEventProps) {
 
                     <button
                         type="submit"
-                        className="w-full inline-flex items-center justify-center text-sm font-semibold px-5 py-2 text-white bg-blue-400 hover:bg-blue-600 active:bg-blue-800 rounded-xl"
+                        disabled={isSubmitting}
+                        className="w-full inline-flex items-center justify-center text-sm font-semibold px-5 py-2 text-white bg-blue-400 hover:bg-blue-600 active:bg-blue-800 rounded-xl disabled:opacity-60"
                     >
-                        Publish event
+                        {isSubmitting ? "Publishing..." : "Publish event"}
                     </button>
                 </form>
             </div>

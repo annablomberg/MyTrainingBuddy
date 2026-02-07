@@ -1,5 +1,13 @@
 import { fetchJson } from "./http";
 
+export type UserResponse = {
+    userId: string;
+    email: string;
+    username: string;
+    name: string;
+    userType: "STANDARD" | "ADMIN" | string;
+}
+
 export type RegisterRequest = {
   email: string;
   username: string;
@@ -8,13 +16,7 @@ export type RegisterRequest = {
 };
 
 export type RegisterResponse = {
-  userResponse: {
-    userId: string;
-    email: string;
-    username: string;
-    name: string;
-    userType: "STANDARD" | "ADMIN" | string;
-  };
+  userResponse: UserResponse;
   accessToken: string;
 };
 
@@ -24,13 +26,7 @@ export type LoginRequest = {
 };
 
 export type LoginResponse = {
-  userResponse: {
-    userId: string;
-    email: string;
-    username: string;
-    name: string;
-    userType: "STANDARD" | "ADMIN" | string;
-  };
+  userResponse: UserResponse;
   accessToken: string;     
 
 }

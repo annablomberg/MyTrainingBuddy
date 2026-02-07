@@ -14,16 +14,16 @@ export function EventCard(props: EventCardProps) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
   const {
-    image,
-    title,
-    description,
-    difficulty,
-    sport,
-    location,
-    date,
-    price,
-    memberPrice,
-    freeForMembers
+      image,
+      title,
+      description,
+      difficulty,
+      sport,
+      location,
+      date,
+      price,
+      memberPrice,
+      freeForMembers
   } = props;
 
   return (
